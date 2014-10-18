@@ -22,8 +22,7 @@ body
       overflow: visible
     .node
       stroke: #fff
-      stroke-width: 1.5px
-
+      stroke-width: 0.1px
     .link
       stroke: #999
       stroke-opacity: 0.6
@@ -51,6 +50,18 @@ body
     background-color: lightsteelblue
     border: 1px solid black
     float: left
+
+  .line
+    stroke-width: 0.1px
+  .line, .node
+    // let the origin be in the bottom left
+    // and let it scale to range [0, 3]
+    transform: translate(0px, 300px) scale(100, -100)
+
+  .positive
+    fill: #2ca02c
+  .negative
+    fill: #d62728
 
   .input
     margin-left: 330px

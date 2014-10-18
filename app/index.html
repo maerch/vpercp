@@ -1,0 +1,66 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>vpercp</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="sytlesheet" href="bower_components/body">
+    <!-- endbuild -->
+  </head>
+  <body>
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+
+    <div class="header">
+      <div class="centered-wrapper">
+        <div class="headings">
+          <h1>Perceptron </h1>
+          <span>a dumb brain</span>
+        </div>
+        <div id="perceptron"></div>
+      </div>
+    </div>
+
+    <div id="data">
+      <div class="centered-wrapper">
+        <div class="canvas"></div>
+        <div class="input">
+          <form>
+            <div>Real function which we want to learn</div>
+            <input id="real-m"></input> &middot; x + <input id="real-b"></input>
+
+            <div>Our perceptron has learned so far</div>
+            <input></input> &middot; x + <input></input>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({app,.tmp}) scripts/main.js -->
+    <script src="scripts/main.js"></script>
+
+    <script src="scripts/percp.js"></script>
+    <script src="scripts/visualize-percp.js"></script>
+    <script src="scripts/visualize-data.js"></script>
+
+    <!-- endbuild -->
+</body>
+</html>

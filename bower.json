@@ -1,0 +1,9 @@
+{
+  "name": "vpercp",
+  "private": true,
+  "dependencies": {
+    "jquery": "~1.11.1",
+    "d3": "~3.4.13",
+    "bourbon": "~4.0.2"
+  }
+}

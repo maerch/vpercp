@@ -4,7 +4,7 @@
 @import "bourbon"
 
 body 
-  background: #fafafa
+  background: url(http://subtlepatterns.com/patterns/crossword.png)
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
   color: #333
   margin: 0px
@@ -44,6 +44,7 @@ body
 #data
   text-align:center
   .canvas
+    overflow: hidden
     box-shadow: inset 0 0 16px #000
     border-radius: 15px
     width: 300px
@@ -54,6 +55,24 @@ body
   .input
     margin-left: 330px
     width: 330px
+
+    input
+      padding: 10px
+      width: 30px
+
+    .f
+      text-align: center
+      padding: 10px
+      border-radius: 15px
+      font-size: 20px
+
+    #real-f
+      background: rgba(6,120,155, 0.5)
+      color: #fff
+    #percp-f
+      color: #fff
+      background: rgba(60,10,195, 0.8)
+
     #real-m
       text-align: right
 

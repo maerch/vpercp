@@ -1,3 +1,5 @@
+/*global d3, Perceptron */
+
 var width = 300,
     height = 200;
 
@@ -16,7 +18,6 @@ var p = new Perceptron(2);
 var nodes = p.graph().nodes;
 var links = p.graph().links;
 
-var mouse = 
 force
     .nodes(nodes)
     .links(links)
@@ -32,7 +33,7 @@ var node = svg.selectAll(".node")
     .data(nodes)
   .enter().append("circle")
     .attr("class", "node")
-    .attr("r", function(d) { return d.group == 2 ? 20 : 10; })
+    .attr("r", function(d) { return d.group === 2 ? 20 : 10; })
     .style("fill", function(d) { return color(d.group); })
     .call(force.drag);
 
@@ -48,10 +49,3 @@ force.on("tick", function() {
   node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
 });
-
-update = function(form) {
-  var x = form[0].value;
-  var y = form[1].value
-};
-
-

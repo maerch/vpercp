@@ -1,20 +1,18 @@
 function Perceptron(n) {
-  this.n         = n
+  this.n         = n;
   this.weights   = [];
   this.threshold = 0;
-
-  var randomWeight = function() { return Math.random() * 2 - 1; }
 
   this.weights[0] = -0.5;
   this.weights[1] = 0.5;
   this.threshold  = 0.6;
 }
 
-Perceptron.prototype.LEARNING_RATE = 0.1
+Perceptron.prototype.LEARNING_RATE = 0.1;
 
 Perceptron.prototype.activate = function(sum) {
   return sum > this.threshold ? -1 : 1;
-}
+};
 
 Perceptron.prototype.apply = function(input) {
   var sum = 0;
@@ -22,23 +20,23 @@ Perceptron.prototype.apply = function(input) {
     sum += this.weights[i] * input[i];
   }
   return this.activate(sum);
-}
+};
 
 Perceptron.prototype.train = function(input, output) {
   var guess = this.apply(input);
-  var error = guess - output;//output - guess;
+  var error = guess - output;
   for(var i=0; i<this.weights.length; i++) {
-    this.weights[i] += this.LEARNING_RATE * error * input[i]
+    this.weights[i] += this.LEARNING_RATE * error * input[i];
   }
   // Using the threshold as a special weights to learn it.
-  this.threshold += this.LEARNING_RATE * error
-}
+  this.threshold += this.LEARNING_RATE * error;
+};
 
 // Helper function which helps to draw the 
 // decision boundary as a straight line.
 Perceptron.prototype.f = function(x) {
   return (-this.weights[0]/this.weights[1]) * x + (this.threshold/this.weights[1]);
-}
+};
 
 // Prints the current internal function learned by this
 // perceptron.
@@ -46,11 +44,11 @@ Perceptron.prototype.printf = function() {
   var m = (-this.weights[0]/this.weights[1]);
   var b = (this.threshold/this.weights[1]);
   console.log("(" + m +") * x + (" + b + ")");
-}
+};
 
 Perceptron.prototype.printw = function() {
   console.log("w=" + this.weights + ", threshold=" + this.threshold);
-}
+};
 
 // Returns a graph which can be used to easily draw a perceptron 
 // in d3.js. TODO: Should probably not be part of this file.
@@ -65,7 +63,7 @@ Perceptron.prototype.graph = function() {
     {"source":0,"target":2,"weight":this.weights[0] + 3},
     {"source":1,"target":2,"weight":this.weights[1] + 3},
     {"source":2,"target":3,"weight":this.threshold  + 3}
-  ]}
+  ]};
 };
 
 Perceptron.prototype.nodes = function() {

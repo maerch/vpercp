@@ -5,12 +5,62 @@
 // for all added nodes for now.
 var nodes = [];
 
+var generateData = function() {
+  for(var i=0; i<100; i++) {
+    var x = Math.random() * 3;
+    var y = Math.random() * 3;
+    addNode(x, y);
+  }
+};
+
+var testData = function() {
+  var errors = 0;
+  for(var i=0; i<nodes.length; i++) {
+    var x      = nodes[i].cx;
+    var y      = nodes[i].cy;
+    var answer = nodes[i].answer;
+
+    if(p.apply([x, y])!==answer) {
+      errors++;
+      nodes[i].wrong = true;
+    }
+  }
+  svg.selectAll(".node")
+      .data(nodes)
+      .attr("class", function(d) { 
+        if(d.wrong) {
+          return "node wrong";
+        } else {
+          return d.answer > 0 ? "node positive" : "node negative"; 
+        }});
+  console.log("Total errors on " + nodes.length + " examples is  " + errors);
+};
+
+var learnData = function() {
+  for(var i=0; i<nodes.length; i++) {
+    var x      = nodes[i].cx;
+    var y      = nodes[i].cy;
+    var answer = nodes[i].answer;
+
+    p.train([x, y], answer);
+    p.printf();
+    p.printw();
+  }
+  rerenderPerceptronFunction();
+  testData();
+};
+
 // Adding a node to the global nodes object and learns
 // the perceptron with the desired outcome and updates
 // the d3.js visualization.
 var learnNode = function(x, y) {
   var answer = realAnswer(x, y);
   p.train([x, y], answer);
+};
+
+var updatePercpFunction = function() {
+  $("#percp-m").val(p.m().toFixed(3));
+  $("#percp-b").val(p.b().toFixed(3));
 };
 
 // Updates the learned function in the
@@ -22,6 +72,7 @@ var rerenderPerceptronFunction = function() {
     .attr("y1", function(d) { return d.y1; })
     .attr("x2", function(d) { return d.x2; })
     .attr("y2", function(d) { return d.y2; });
+  updatePercpFunction();
 };
 
 // Updates the function which we wanna learn in the
@@ -80,12 +131,14 @@ $("#real-b").change(function() {
 
 // Computes the answer which the perceptron should give.
 var realAnswer = function(x, y) {
-  return y < real.f(x) ? 1 : -1;
+  return y > real.f(x) ? 1 : -1;
 };
 
 // The perceptron which shall learn the function f
 // Input size is two since we want to visualize the data.
 var p = new Perceptron(2);
+
+updatePercpFunction();
 
 var svg = d3.select("div#data .canvas").append("svg")
               .attr("width", width)

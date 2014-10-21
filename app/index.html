@@ -42,8 +42,11 @@
             <div id="real-f" class="f"><input id="real-m" type="number" step="any"></input> &middot; x + <input id="real-b" type="number" step="any"></input></div>
 
             <h3>Our perceptron has learned so far</h3>
-            <div id="percp-f" class="f"><input disabled></input> &middot; x + <input disabled></input></div>
+            <div id="percp-f" class="f"><input id="percp-m" disabled></input> &middot; x + <input id="percp-b" disabled></input></div>
           </form>
+          <button onclick="generateData();">Generate data</button>
+          <button onclick="learnData();">Learn data</button>
+          <button onclick="testData();">Test data</button>
         </div>
       </div>
     </div>

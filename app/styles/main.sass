@@ -58,10 +58,15 @@ body
     // and let it scale to range [0, 3]
     transform: translate(0px, 300px) scale(100, -100)
 
+  .node
+    stroke: white
+    stroke-width: 0.02px
   .positive
     fill: #2ca02c
   .negative
     fill: #d62728
+  .wrong
+    fill: orange
 
   .input
     margin-left: 330px
@@ -69,7 +74,7 @@ body
 
     input
       padding: 10px
-      width: 30px
+      width: 50px
 
     .f
       text-align: center
@@ -84,7 +89,7 @@ body
       color: #fff
       background: rgba(60,10,195, 0.8)
 
-    #real-m
+    #real-m, #percp-m
       text-align: right
 
 .browsehappy

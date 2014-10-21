@@ -8,10 +8,10 @@ function Perceptron(n) {
   this.threshold  = 0.6;
 }
 
-Perceptron.prototype.LEARNING_RATE = 0.1;
+Perceptron.prototype.LEARNING_RATE = 0.01;
 
 Perceptron.prototype.activate = function(sum) {
-  return sum > this.threshold ? -1 : 1;
+  return sum > this.threshold ? 1 : -1;
 };
 
 Perceptron.prototype.apply = function(input) {
@@ -24,18 +24,27 @@ Perceptron.prototype.apply = function(input) {
 
 Perceptron.prototype.train = function(input, output) {
   var guess = this.apply(input);
-  var error = guess - output;
+  var error = output - guess;
+  console.log(error);
   for(var i=0; i<this.weights.length; i++) {
     this.weights[i] += this.LEARNING_RATE * error * input[i];
   }
   // Using the threshold as a special weights to learn it.
-  this.threshold += this.LEARNING_RATE * error;
+  this.threshold += this.LEARNING_RATE * -error;
 };
 
 // Helper function which helps to draw the 
 // decision boundary as a straight line.
 Perceptron.prototype.f = function(x) {
-  return (-this.weights[0]/this.weights[1]) * x + (this.threshold/this.weights[1]);
+  return this.m() * x + this.b();
+};
+
+Perceptron.prototype.m = function() {
+  return -this.weights[0]/this.weights[1];
+};
+
+Perceptron.prototype.b = function() {
+  return this.threshold/this.weights[1];
 };
 
 // Prints the current internal function learned by this

@@ -1,9 +1,28 @@
 /* global d3, Perceptron */
-/* exported generateData, learnAll, learnNode, rerenderPerceptronFunction  */
+/* exported generateData, learnAll, rerenderPerceptronFunction  */
 
 // Using an global array as the container
 // for all added nodes for now.
 var nodes = [];
+
+// Iterates through all nodes linked to the
+// d3 visualization and updates the color of the
+// node regarding the correct classification
+var updateNodeClass = function(d) {
+  var classes = ['node'];
+  if(d.wrong) {
+    classes.push('wrong');
+  } else {
+    classes.push(d.answer > 0 ? "positive" : "negative"); 
+  }
+  return classes.join(' ');
+};
+
+// Updates the percetage of the error in percentage 
+// with regard to the number of nodes
+var updateErrorStatus = function(errors) {
+  $('#error-percentage').val(Math.round(errors/nodes.length * 100));
+};
 
 // All nodes will be applied to the perceptron
 // and the according d3 data set will be updated
@@ -28,31 +47,21 @@ var applyAndUpdate = function() {
       errors++;
     }
   }
-  // Determine class for node
-  var nodeClass = function(d) {
-    var classes = ['node'];
-    if(d.wrong) {
-      classes.push('wrong');
-    } else {
-      classes.push(d.answer > 0 ? "positive" : "negative"); 
-    }
-    return classes.join(' ');
-  };
   // ... update color of existing ...
   nodeSVGroup.selectAll(".node")
       .data(nodes)
-      .attr("class", nodeClass);
+      .attr("class", updateNodeClass);
   // .. and append new nodes
   nodeSVGroup.selectAll(".node")
       .data(nodes).enter().append('circle')
-      .attr("class", nodeClass)
+      .attr("class", updateNodeClass)
       .attr("cx", function(d) { return d.cx; })
       .attr("cy", function(d) { return d.cy; })
       .attr("r",  function() { return 0.01; })
       .transition().ease("elastic").delay(10).duration(1000)
       .attr("r",     function(d) { return d.r; });
 
-  $('#error-percentage').val(Math.round(errors/nodes.length * 100));
+  updateErrorStatus(errors);
 };
 
 var learnAll = function() {
@@ -67,12 +76,47 @@ var learnAll = function() {
   applyAndUpdate();
 };
 
-// Adding a node to the global nodes object and learns
-// the perceptron with the desired outcome and updates
-// the d3.js visualization.
-var learnNode = function(x, y) {
-  var answer = realAnswer(x, y);
-  p.train([x, y], answer);
+var learnStepByStep = function() {
+  var i = 0;
+  var timePerNode = 1000;
+  var timer = setInterval(function(){
+    svg.selectAll('.node')
+      .data(nodes).transition()
+      .attr('r', function(d, j) {
+        return i===j ? d.r * 3 : d.r;
+      }).transition().delay(timePerNode)
+      .attr('r', function(d) { return d.r; });
+
+    // Training
+    var node   = nodes[i];
+    var x      = node.cx;
+    var y      = node.cy;
+    var answer = realAnswer(x, y);
+    p.train([x, y], answer);
+
+    // Testing
+    var answer  = realAnswer(x, y);
+    var guess   = p.apply([x, y]);
+    node.answer = answer;
+    node.guess  = guess;
+    node.wrong  = (guess!==answer);
+
+    // Updating
+    rerenderPerceptronFunction();
+    var errors = 0;
+    for(var k=0; k<nodes.length; k++) {
+      if(nodes[k].wrong) {
+        errors++;
+      }
+    }
+    updateErrorStatus(errors);
+    nodeSVGroup.selectAll(".node")
+        .data(nodes)
+        .attr("class", updateNodeClass);
+    if(++i === nodes.length) {
+      clearInterval(timer);
+    }
+  },timePerNode);
 };
 
 var updatePercpFunction = function() {

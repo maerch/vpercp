@@ -26,6 +26,12 @@ force
     .links(links)
     .start();
 
+var updatePerceptronsLinks = function() {
+  svg.selectAll(".link")
+      .data(p.graph().links)
+      .style("stroke-width", function(d) { return d.weight; });
+};
+
 var link = svg.selectAll(".link")
     .data(links)
   .enter().append("line")

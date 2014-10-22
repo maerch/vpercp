@@ -6,8 +6,8 @@ var width = 300,
 var color = d3.scale.category20();
 
 var force = d3.layout.force()
-    .charge(-2000)
-    .linkDistance(40)
+    .charge(-200)
+    .linkDistance(80)
     .size([width, height]);
 
 var svg = d3.select("div#perceptron").append("svg")
@@ -17,6 +17,9 @@ var svg = d3.select("div#perceptron").append("svg")
 var p = new Perceptron(2);
 var nodes = p.graph().nodes;
 var links = p.graph().links;
+
+var mnode = {fixed: true, r: 0};
+nodes.push(mnode);
 
 force
     .nodes(nodes)
@@ -33,9 +36,16 @@ var node = svg.selectAll(".node")
     .data(nodes)
   .enter().append("circle")
     .attr("class", "node")
-    .attr("r", function(d) { return d.group === 2 ? 20 : 10; })
+    .attr("r", function(d) { if(d.r===0) {return 0;} else {return d.group === 2 ? 20 : 10;}})
     .style("fill", function(d) { return color(d.group); })
     .call(force.drag);
+ 
+svg.on("mousemove", function() {
+  var p1 = d3.mouse(this);
+  mnode.px = p1[0];
+  mnode.py = p1[1];
+  force.resume();
+});
 
 node.append("title")
     .text(function(d) { return d.name; });

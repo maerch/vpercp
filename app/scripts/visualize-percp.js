@@ -34,12 +34,19 @@ var link = svg.selectAll(".link")
 
 var node = svg.selectAll(".node")
     .data(nodes)
-  .enter().append("circle")
-    .attr("class", "node")
-    .attr("r", function(d) { if(d.r===0) {return 0;} else {return d.group === 2 ? 20 : 10;}})
-    .style("fill", function(d) { return color(d.group); })
+  .enter().append("g")
     .call(force.drag);
  
+    node.append("circle")
+    .attr("class", "node")
+    .attr("r", function(d) { if(d.r===0) {return 0;} else {return d.group === 2 ? 25 : 15;}})
+    .style("fill", function(d) { return color(d.group); })
+
+    node.append("text")
+    .attr("x", -5)
+    .attr("y", 5)
+    .text(function(d) { return d.label });
+
 svg.on("mousemove", function() {
   var p1 = d3.mouse(this);
   mnode.px = p1[0];
@@ -56,6 +63,5 @@ force.on("tick", function() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 });

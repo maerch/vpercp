@@ -62,10 +62,10 @@ Perceptron.prototype.printw = function() {
 // in d3.js. TODO: Should probably not be part of this file.
 Perceptron.prototype.graph = function() {
   return {"nodes":[
-    {"index":0, "name":"cx","group":1},
-    {"index":1, "name":"cy","group":1},
-    {"index":2, "name":"p","group":2},
-    {"index":4, "name":"f(x)","group":3}
+    {"index":0, "name":"cx","group":1, "label":"x" + String.fromCharCode(8320)},
+    {"index":1, "name":"cy","group":1, "label":"x" + String.fromCharCode(8321)},
+    {"index":2, "name":"p","group":2, "label":String.fromCharCode(931)},
+    {"index":4, "name":"f(x)","group":3, "label":"y"}
   ],
   "links":[
     {"source":0,"target":2,"weight":this.weights[0] + 3},

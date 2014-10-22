@@ -25,7 +25,6 @@ Perceptron.prototype.apply = function(input) {
 Perceptron.prototype.train = function(input, output) {
   var guess = this.apply(input);
   var error = output - guess;
-  console.log(error);
   for(var i=0; i<this.weights.length; i++) {
     this.weights[i] += this.LEARNING_RATE * error * input[i];
   }

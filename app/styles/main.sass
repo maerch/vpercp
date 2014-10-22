@@ -2,6 +2,7 @@
 // endbower
 
 @import "bourbon"
+@import url(http://fonts.googleapis.com/css?family=Shadows+Into+Light+Two)
 
 body 
   background: url(http://subtlepatterns.com/patterns/crossword.png)
@@ -12,6 +13,9 @@ body
 .centered-wrapper
   width: 800px
   margin: 0 auto
+
+.handwritte
+  font-family: 'Shadows Into Light Two', cursive
 
 .header
   margin: 30px 0px
@@ -57,6 +61,10 @@ body
     // let the origin be in the bottom left
     // and let it scale to range [0, 3]
     transform: translate(0px, 300px) scale(100, -100)
+  #rline
+    stroke: rgba(6,120,155, 0.9)
+  #pline
+    stroke: rgba(60,10,195, 0.9)
 
   .node
     stroke: white
@@ -72,6 +80,15 @@ body
     margin-left: 330px
     width: 330px
 
+    h3
+      text-align: center
+      margin: 10px
+
+    .commands
+      text-align:center
+      padding: 20px
+      button
+        padding: 5px
     input
       padding: 10px
       width: 50px
@@ -83,14 +100,18 @@ body
       font-size: 20px
 
     #real-f
-      background: rgba(6,120,155, 0.5)
+      background: rgba(6,120,155, 0.9)
       color: #fff
     #percp-f
       color: #fff
-      background: rgba(60,10,195, 0.8)
+      background: rgba(60,10,195, 0.9)
+    #error
+      color: #fff
+      background: orange
 
-    #real-m, #percp-m
+    #real-m, #percp-m, #error-percentage
       text-align: right
+
 
 .browsehappy
   margin: 0.2em 0

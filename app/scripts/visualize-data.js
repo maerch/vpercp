@@ -1,53 +1,70 @@
 /* global d3, Perceptron */
-/* exported generateDataToLearn, learnNode, rerenderPerceptronFunction  */
+/* exported generateData, learnAll, learnNode, rerenderPerceptronFunction  */
 
 // Using an global array as the container
 // for all added nodes for now.
 var nodes = [];
 
-var generateData = function() {
-  for(var i=0; i<100; i++) {
-    var x = Math.random() * 3;
-    var y = Math.random() * 3;
-    addNode(x, y);
-  }
-};
-
-var testData = function() {
+// All nodes will be applied to the perceptron
+// and the according d3 data set will be updated
+// with information about the guess, answer and error.
+// Also, an update and redrawing of d3 will be triggered.
+var applyAndUpdate = function() {
+  // apply and ...
   var errors = 0;
   for(var i=0; i<nodes.length; i++) {
-    var x      = nodes[i].cx;
-    var y      = nodes[i].cy;
-    var answer = nodes[i].answer;
+    var node    = nodes[i];
+    var x       = node.cx;
+    var y       = node.cy;
 
-    if(p.apply([x, y])!==answer) {
+    var answer  = realAnswer(x, y);
+    var guess   = p.apply([x, y]);
+
+    node.answer = answer;
+    node.guess  = guess;
+    node.wrong  = (guess!==answer);
+
+    if(node.wrong) {
       errors++;
-      nodes[i].wrong = true;
     }
   }
-  svg.selectAll(".node")
+  // Determine class for node
+  var nodeClass = function(d) {
+    var classes = ['node'];
+    if(d.wrong) {
+      classes.push('wrong');
+    } else {
+      classes.push(d.answer > 0 ? "positive" : "negative"); 
+    }
+    return classes.join(' ');
+  };
+  // ... update color of existing ...
+  nodeSVGroup.selectAll(".node")
       .data(nodes)
-      .attr("class", function(d) { 
-        if(d.wrong) {
-          return "node wrong";
-        } else {
-          return d.answer > 0 ? "node positive" : "node negative"; 
-        }});
-  console.log("Total errors on " + nodes.length + " examples is  " + errors);
+      .attr("class", nodeClass);
+  // .. and append new nodes
+  nodeSVGroup.selectAll(".node")
+      .data(nodes).enter().append('circle')
+      .attr("class", nodeClass)
+      .attr("cx", function(d) { return d.cx; })
+      .attr("cy", function(d) { return d.cy; })
+      .attr("r",  function() { return 0.01; })
+      .transition().ease("elastic").delay(10).duration(1000)
+      .attr("r",     function(d) { return d.r; });
+
+  $('#error-percentage').val(Math.round(errors/nodes.length * 100));
 };
 
-var learnData = function() {
+var learnAll = function() {
   for(var i=0; i<nodes.length; i++) {
     var x      = nodes[i].cx;
     var y      = nodes[i].cy;
-    var answer = nodes[i].answer;
+    var answer = realAnswer(x, y);
 
     p.train([x, y], answer);
-    p.printf();
-    p.printw();
   }
   rerenderPerceptronFunction();
-  testData();
+  applyAndUpdate();
 };
 
 // Adding a node to the global nodes object and learns
@@ -66,8 +83,9 @@ var updatePercpFunction = function() {
 // Updates the learned function in the
 // d3.js visualization and displays it.
 var rerenderPerceptronFunction = function() {
-  svg.selectAll("#pline")
+  linesSVGroup.selectAll("#pline")
     .data([{"x1":-1, "y1": p.f(-1), "x2":4, "y2": p.f(4)}])
+    .transition().duration(1000).ease('elastic')
     .attr("x1", function(d) { return d.x1; })
     .attr("y1", function(d) { return d.y1; })
     .attr("x2", function(d) { return d.x2; })
@@ -78,7 +96,7 @@ var rerenderPerceptronFunction = function() {
 // Updates the function which we wanna learn in the
 // d3.js visualization and displays it.
 var rerenderRealFunction = function() {
-  svg.selectAll("#rline")
+  linesSVGroup.selectAll("#rline")
     .data([{"x1":-1, "y1": real.f(-1), "x2":4, "y2": real.f(4)}])
     .transition()
     .attr("x1", function(d) { return d.x1; })
@@ -87,22 +105,25 @@ var rerenderRealFunction = function() {
     .attr("y2", function(d) { return d.y2; });
 };
 
-// Adds a node and displays it
+// Adding a node without any updating of the d3 visualization.
 var addNode = function(x, y) {
-  var guess  = p.apply([x, y]);
-  var answer = realAnswer(x, y);
-  nodes.push({"cx":x, "cy":y, "r": 0.08, "group": 6, "answer": answer, "guess": guess });
+  nodes.push({"cx":x, "cy":y, "r": 0.08, "group": 6});
+};
 
-  // Updating the data in the d3.js visualization
-  svg.selectAll(".node")
-      .data(nodes)
-    .enter().append("circle")
-      .attr("cx", function(d) { return d.cx; })
-      .attr("cy", function(d) { return d.cy; })
-      .attr("r",  function() { return 0.01; })
-      .attr("class", function(d) { return d.answer > 0 ? "node positive" : "node negative"; })
-      .transition().ease("elastic").delay(10).duration(1000)
-      .attr("r",     function(d) { return d.r; });
+// Generates 100 random data points, applies and renderes them
+var generateData = function() {
+  for(var i=0; i<100; i++) {
+    var x = Math.random() * 3;
+    var y = Math.random() * 3;
+    addNode(x, y);
+  }
+  applyAndUpdate();
+};
+
+// Adds a node and directly applies as well as updates d3.
+var addAndApplyNode = function(x, y) {
+  addNode(x, y);
+  applyAndUpdate();
 };
 
 // d3.js initialization stuff
@@ -144,28 +165,31 @@ var svg = d3.select("div#data .canvas").append("svg")
               .attr("width", width)
               .attr("height", height);
 
+var nodeSVGroup  = svg.append('g').attr("id", "nodes-svg-group");
+var linesSVGroup = svg.append('g').attr("id", "lines-svg-group");
+
 svg.on('click', function() {
   // Scaling the returned coordiantes according
   // to the scaling of the line/circles
   // (see css file)
   var x = d3.mouse(this)[0]/100;
   var y = d3.mouse(this)[1]/100 * -1 + 3;
-  addNode(x, y);
+  addAndApplyNode(x, y);
 }); 
 
 
+
 // Adding the "real" function as a line
-svg.append("svg:line")
+linesSVGroup.append("svg:line")
     .attr("x1", -1)
     .attr("y1", real.f(-1))
     .attr("x2", 4)
     .attr("y2", real.f(4))
     .attr("id", "rline")
-    .attr("class", "line")
-    .style("stroke", "rgba(6,120,155, 0.5)");
+    .attr("class", "line");
 
 // Adding the learned function as a line
-svg.selectAll("#pline")
+linesSVGroup.selectAll("#pline")
     .data([{"x1":-1, "y1": p.f(-1), "x2":4, "y2": p.f(4)}])
   .enter().append('line').transition().duration(500)
     .attr("x1", function(d) { return d.x1; })
@@ -173,5 +197,5 @@ svg.selectAll("#pline")
     .attr("x2", function(d) { return d.x2; })
     .attr("y2", function(d) { return d.y2; })
     .attr("id", "pline")
-    .attr("class", "line")
-    .style("stroke", "rgba(60,10,195, 0.8)");
+    .attr("class", "line");
+

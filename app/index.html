@@ -38,15 +38,20 @@
         <div class="canvas"></div>
         <div class="input">
           <form>
-            <h3>Function which we want to learn</h3>
+            <h3>Function to learn</h3>
             <div id="real-f" class="f"><input id="real-m" type="number" step="any"></input> &middot; x + <input id="real-b" type="number" step="any"></input></div>
 
-            <h3>Our perceptron has learned so far</h3>
+            <h3>Perceptron's function</h3>
             <div id="percp-f" class="f"><input id="percp-m" disabled></input> &middot; x + <input id="percp-b" disabled></input></div>
+
+            <h3>Perceptron's error rate</h3>
+            <div id="error" class="f"><input id="error-percentage" disabled></input> %</div>
           </form>
-          <button onclick="generateData();">Generate data</button>
-          <button onclick="learnData();">Learn data</button>
-          <button onclick="testData();">Test data</button>
+          <div class="commands">
+            <button onclick="generateData();">Generate data</button>
+            <button onclick="learnAll();">Learn at once</button>
+            <button onclick="learnStepByStep();">Learn step by step</button>
+          </div>
         </div>
       </div>
     </div>
@@ -57,9 +62,6 @@
     <script src="bower_components/d3/d3.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
-    <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script src="scripts/main.js"></script>
 
     <script src="scripts/percp.js"></script>
     <script src="scripts/visualize-percp.js"></script>

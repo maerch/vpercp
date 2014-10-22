@@ -1,5 +1,5 @@
 /* global d3, Perceptron */
-/* exported generateData, learnAll, rerenderPerceptronFunction  */
+/* exported generateData, learnAll, learnStepByStep, rerenderPerceptronFunction  */
 
 // Using an global array as the container
 // for all added nodes for now.
@@ -95,7 +95,6 @@ var learnStepByStep = function() {
     p.train([x, y], answer);
 
     // Testing
-    var answer  = realAnswer(x, y);
     var guess   = p.apply([x, y]);
     node.answer = answer;
     node.guess  = guess;

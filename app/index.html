@@ -37,7 +37,6 @@
       <div class="centered-wrapper">
         <div class="canvas"></div>
         <div class="input">
-          <form>
             <h3>Function to learn</h3>
             <div id="real-f" class="f"><input id="real-m" type="number" step="any"></input> &middot; x + <input id="real-b" type="number" step="any"></input></div>
 
@@ -46,12 +45,17 @@
 
             <h3>Perceptron's error rate</h3>
             <div id="error" class="f"><input id="error-percentage" disabled></input> %</div>
-          </form>
-          <div class="commands">
-            <button onclick="generateData();">Generate data</button>
-            <button onclick="learnAll();">Learn at once</button>
-            <button onclick="learnStepByStep();">Learn step by step</button>
-          </div>
+
+            <h3>Learning</h3>
+            <div class="buttons">
+              <button onclick="generateData();">Add Random Data</button>
+              <button onclick="options(learn);">Learn</button>
+            </div>
+            <div class="options">
+              <input type="checkbox" name="learnUntilFlawless" value="learnUntilFlawless">Until Flawless<br />
+              <input type="checkbox" name="learnStepByStep" value="learnStepByStep">Point By Point<br />
+            </div>
+          <div id="iterations"><span id="counter">0</span> iterations of learning so far</div>
         </div>
       </div>
     </div>

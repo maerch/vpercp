@@ -40,12 +40,12 @@ var node = svg.selectAll(".node")
     node.append("circle")
     .attr("class", "node")
     .attr("r", function(d) { if(d.r===0) {return 0;} else {return d.group === 2 ? 25 : 15;}})
-    .style("fill", function(d) { return color(d.group); })
+    .style("fill", function(d) { return color(d.group); });
 
     node.append("text")
     .attr("x", -5)
     .attr("y", 5)
-    .text(function(d) { return d.label });
+    .text(function(d) { return d.label; });
 
 svg.on("mousemove", function() {
   var p1 = d3.mouse(this);

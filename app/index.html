@@ -49,11 +49,11 @@
             <h3>Learning</h3>
             <div class="buttons">
               <button onclick="generateData();">Add Random Data</button>
-              <button onclick="options(learn);">Learn</button>
+              <button onclick="learn();">Learn</button>
             </div>
             <div class="options">
-              <input type="checkbox" name="learnUntilFlawless" value="learnUntilFlawless">Until Flawless<br />
-              <input type="checkbox" name="learnStepByStep" value="learnStepByStep">Point By Point<br />
+              <input type="checkbox" id="learnUntilFlawless" name="learnUntilFlawless" value="learnUntilFlawless">Until Flawless<br />
+              <input type="checkbox" id="learnStepByStep"    name="learnStepByStep"    value="learnStepByStep">Point By Point<br />
             </div>
           <div id="iterations"><span id="counter">0</span> iterations of learning so far</div>
         </div>

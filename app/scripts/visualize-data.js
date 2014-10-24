@@ -1,5 +1,5 @@
 /* global d3, Perceptron */
-/* exported generateData, learnAll, learnStepByStep, rerenderPerceptronFunction  */
+/* exported generateData, learn, rerenderPerceptronFunction  */
 
 // Using an global array as the container
 // for all added nodes for now.
@@ -16,6 +16,17 @@ var updateNodeClass = function(d) {
     classes.push(d.answer > 0 ? "positive" : "negative"); 
   }
   return classes.join(' ');
+};
+
+// Counts the current errors caused by the perceptron
+var countErrors = function() {
+  var errors = 0;
+  for(var k=0; k<nodes.length; k++) {
+    if(nodes[k].wrong) {
+      errors++;
+    }
+  }
+  return errors;
 };
 
 // Updates the percetage of the error in percentage 
@@ -74,12 +85,13 @@ var learnAll = function() {
   }
   rerenderPerceptronFunction();
   applyAndUpdate();
+  incrementAndUpdateIterations();
 };
 
-var learnStepByStep = function() {
+var learnStepByStep = function(callback) {
   var i = 0;
   var timePerNode = 1000;
-  var timer = setInterval(function(){
+  var stepTimer = setInterval(function(){
     svg.selectAll('.node')
       .data(nodes).transition()
       .attr('r', function(d, j) {
@@ -102,20 +114,56 @@ var learnStepByStep = function() {
 
     // Updating
     rerenderPerceptronFunction();
-    var errors = 0;
-    for(var k=0; k<nodes.length; k++) {
-      if(nodes[k].wrong) {
-        errors++;
-      }
-    }
-    updateErrorStatus(errors);
+    updateErrorStatus(countErrors());
     nodeSVGroup.selectAll(".node")
         .data(nodes)
         .attr("class", updateNodeClass);
     if(++i === nodes.length) {
+      clearInterval(stepTimer);
+      incrementAndUpdateIterations();
+      if(typeof callback === "function") {
+        callback.call();
+      }
+    }
+
+  },timePerNode);
+};
+
+// Read the options and call the learn function accordingly
+var learn = function() {
+  var flawlessOption   = $("#learnUntilFlawless").is(':checked');
+  var stepByStepOption = $("#learnStepByStep").is(':checked');
+
+  if(stepByStepOption) {
+    return flawlessOption ? flawlessStepByStep() : learnStepByStep();
+  } else {
+    return flawlessOption ? flawlessAll()       : learnAll();
+  }
+};
+
+// Learn all the data at once until we have no more errors
+var flawlessAll = function() {
+  var timer = setInterval(function(){
+    learnAll();
+    if(countErrors() === 0) {
       clearInterval(timer);
     }
-  },timePerNode);
+  }, 1000);
+};
+
+// Learn all the data stey by step until we have no more errors
+var flawlessStepByStep = function() {
+  if(countErrors() === 0) {
+    return;
+  } else {
+    learnStepByStep(flawlessStepByStep);
+  }
+};
+
+var iterations = 0;
+var incrementAndUpdateIterations = function() {
+  iterations++;
+  $('div#iterations span#counter').html(iterations);
 };
 
 var updatePercpFunction = function() {

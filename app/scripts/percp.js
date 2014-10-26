@@ -46,6 +46,14 @@ Perceptron.prototype.b = function() {
   return this.threshold/this.weights[1];
 };
 
+Perceptron.prototype.clone = function() {
+  var clone       = new Perceptron(this.n);
+  clone.weights   = this.weights;
+  clone.threshold = this.threshold;
+
+  return clone;
+};
+
 // Prints the current internal function learned by this
 // perceptron.
 Perceptron.prototype.printf = function() {

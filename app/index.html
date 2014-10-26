@@ -13,6 +13,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">
     <link rel="sytlesheet" href="bower_components/body">
     <!-- endbuild -->
   </head>
@@ -36,6 +37,18 @@
     <div id="data">
       <div class="centered-wrapper">
         <div class="canvas"></div>
+        <div id="sliders">
+          <div class="iterations">
+            <h3>Iteration #<span class="value">0</span></h3>
+            <div class="slider"></div>
+          </div>
+          <div class="points">
+            <h3>Point #<span class="value">0</span></h3>
+            <div class="slider"></div>
+          </div>
+        </div>
+
+          
         <div class="input">
             <h3>Function to learn</h3>
             <div id="real-f" class="f"><input id="real-m" type="number" step="any"></input> &middot; x + <input id="real-b" type="number" step="any"></input></div>
@@ -51,11 +64,6 @@
               <button onclick="generateData();">Add Random Data</button>
               <button onclick="learn();">Learn</button>
             </div>
-            <div class="options">
-              <input type="checkbox" id="learnUntilFlawless" name="learnUntilFlawless" value="learnUntilFlawless">Until Flawless<br />
-              <input type="checkbox" id="learnStepByStep"    name="learnStepByStep"    value="learnStepByStep">Point By Point<br />
-            </div>
-          <div id="iterations"><span id="counter">0</span> iterations of learning so far</div>
         </div>
       </div>
     </div>
@@ -64,6 +72,7 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

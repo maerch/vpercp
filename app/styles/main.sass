@@ -45,6 +45,7 @@ body
       margin-left: 20px
 
 #data
+  position: relative
   text-align:center
   .canvas
     overflow: hidden
@@ -82,27 +83,15 @@ body
 
     .buttons
       float: left
+      width: 330px
       button
+        width: 49%
         background-color: #0078e7
         color: white
         font-size: 0.8em
         padding: 15px
         border-radius: 15px
         border: 0 rgba(0,0,0,0)
-
-    .options 
-      text-align: left
-      font-size: 12px
-      padding: 5px
-      input
-        width: 20px
-
-    #iterations
-      clear: both
-      font-size: 0.7em
-      margin: 10px
-      text-align: center
-
 
     h3
       text-align: center
@@ -134,6 +123,17 @@ body
     #real-m, #percp-m, #error-percentage
       text-align: right
 
+#sliders
+  width: 300px
+  position: absolute
+  top: 320px
+  text-align: center
+
+  .slider
+    margin: 20px auto
+    width: 90%
+  .value
+    color: #0078e7
 
 .browsehappy
   margin: 0.2em 0

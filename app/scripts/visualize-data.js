@@ -131,14 +131,7 @@ var learnStepByStep = function(callback) {
 
 // Read the options and call the learn function accordingly
 var learn = function() {
-  var flawlessOption   = $("#learnUntilFlawless").is(':checked');
-  var stepByStepOption = $("#learnStepByStep").is(':checked');
-
-  if(stepByStepOption) {
-    return flawlessOption ? flawlessStepByStep() : learnStepByStep();
-  } else {
-    return flawlessOption ? flawlessAll()       : learnAll();
-  }
+  flawlessAll();
 };
 
 // Learn all the data at once until we have no more errors
@@ -290,3 +283,19 @@ linesSVGroup.selectAll("#pline")
     .attr("id", "pline")
     .attr("class", "line");
 
+$(function() {
+  $("#sliders .iterations > div.slider").slider({
+    min: 0,
+    max: 21,
+    value: 1,
+    slide: function(event, ui) { $("#sliders .iterations span.value").html(ui.value); }
+  });
+});
+$(function() {
+  $("#sliders .points > div.slider").slider({
+    min: 0,
+    max: 100,
+    value: 1,
+    slide: function(event, ui) { $("#sliders .points span.value").html(ui.value); }
+  });
+});

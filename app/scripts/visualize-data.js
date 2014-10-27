@@ -95,28 +95,38 @@ var d3percp = (function(d3, Perceptron, $) {
 
   var showSlider = function() {
     $("#sliders .iterations span.value").html(iterations.length -1); 
-    $("#sliders").slideDown(1000);
-    $(function() {
-      $("#sliders .iterations > div.slider").slider({
-        min: 0,
-        max: iterations.length - 1,
-        value: iterations.length - 1,
-        slide: function(event, ui) { 
-          var i           = ui.value;
-          var currentPerp = iterations[i];
-          $("#sliders .iterations span.value").html(i); 
-          rerenderPerceptronFunction(currentPerp);
-          applyAndUpdate(currentPerp);
-        }
-      });
+
+    var slider = $("#sliders .iterations > div.slider");
+    slider.slider({
+      min: 0,
+      max: iterations.length - 1,
+      value: iterations.length - 1,
+      slide: function(event, ui) { 
+        var i           = ui.value;
+        var currentPerp = iterations[i];
+        $("#sliders .iterations span.value").html(i); 
+        rerenderPerceptronFunction(currentPerp);
+        applyAndUpdate(currentPerp);
+      }
     });
+    slider.slideDown("slow");
+  };
+
+  var disableFurtherLearning = function() {
+    $('button#learn').attr('disabled', true);
+    $('button#generate').attr('disabled', true);
+  
+    $("#real-m").attr('disabled', true);
+    $("#real-b").attr('disabled', true);
   };
 
   // Learn all the data at once until we have no more errors
   // Also, save all learned iterations.
   var learn = function() {
+    disableFurtherLearning();
     var timer = setInterval(function(){
       iterations.push(p.clone());
+      $("#sliders .iterations span.value").html(iterations.length -1); 
 
       // single iteration
       for(var i=0; i<nodes.length; i++) {
@@ -128,6 +138,7 @@ var d3percp = (function(d3, Perceptron, $) {
       }
       rerenderPerceptronFunction(p);
       applyAndUpdate(p);
+
 
       if(countErrors() === 0) {
         iterations.push(p.clone());

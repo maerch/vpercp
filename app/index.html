@@ -37,10 +37,10 @@
     <div id="data">
       <div class="centered-wrapper">
         <div class="canvas"></div>
-        <div id="sliders" style="display: none;">
+        <div id="sliders">
           <div class="iterations">
             <h3>Iteration #<span class="value">0</span></h3>
-            <div class="slider"></div>
+            <div style="display: none;" class="slider"></div>
           </div>
         </div>
 
@@ -57,9 +57,9 @@
 
             <h3>Learning</h3>
             <div class="buttons">
-              <button onclick="d3percp.generate();">Add Random Data</button>
-              <button onclick="d3percp.learn();">Learn</button>
-              <button id="reset" onclick="location.reload();">Reset</button>
+              <button id="generate" onclick="d3percp.generate();">Add Random Data</button>
+              <button id="learn"    onclick="d3percp.learn();">Learn</button>
+              <button id="reset"    onclick="location.reload();">Reset</button>
             </div>
         </div>
       </div>

@@ -3,10 +3,13 @@
 
 var d3percp = (function(d3, Perceptron, $) {
 
-  var width = 300,
+  var expose = {};
+
+  var width  = 300,
       height = 300;
 
-  var expose     = {};
+  var learningInterval = 100;
+  var randomPoints     = 50;
 
   var nodes      = [];
   var iterations = [];
@@ -131,7 +134,7 @@ var d3percp = (function(d3, Perceptron, $) {
         clearInterval(timer);
         showSlider();
       }
-    }, 300);
+    }, learningInterval);
   };
   expose.learn = learn;
 
@@ -172,7 +175,7 @@ var d3percp = (function(d3, Perceptron, $) {
 
   // Generates 100 random data points, applies and renderes them
   var generateData = function() {
-    for(var i=0; i<100; i++) {
+    for(var i=0; i<randomPoints; i++) {
       var x = Math.random() * 3;
       var y = Math.random() * 3;
       addNode(x, y);

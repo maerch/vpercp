@@ -126,7 +126,12 @@ var d3percp = (function(d3, Perceptron, $) {
     disableFurtherLearning();
     var timer = setInterval(function(){
       iterations.push(p.clone());
-      $("#sliders .iterations span.value").html(iterations.length -1); 
+
+      var current = iterations.length - 1;
+      $("#sliders .iterations span.value").html(current); 
+      if(current === 100) {
+        $(".notice").slideDown("slow");
+      }
 
       // single iteration
       for(var i=0; i<nodes.length; i++) {

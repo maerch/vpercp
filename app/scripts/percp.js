@@ -48,7 +48,7 @@ Perceptron.prototype.b = function() {
 
 Perceptron.prototype.clone = function() {
   var clone       = new Perceptron(this.n);
-  clone.weights   = this.weights;
+  clone.weights   = this.weights.slice();
   clone.threshold = this.threshold;
 
   return clone;

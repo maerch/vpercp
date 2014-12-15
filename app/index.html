@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Perceptron &ndash; a dumb brain</title>
-    <meta name="description" content="Visualization of a Perceptron learning a function">
+    <meta name="description" content="Visualization of Perceptron learning">
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="/favicon.ico">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -24,67 +24,12 @@
 
 <a href="https://github.com/maerch/vpercp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
 
-    <div class="header">
-      <div class="centered-wrapper">
-        <div class="headings">
-          <h1>Perceptron </h1>
-          <span>a dumb brain/<a href="http://maerch.github.io/2014/10/22/perceptron.html">kraken</a></span>
-        </div>
-        <div id="perceptron"></div>
-      </div>
+    <div>
+      <ul>
+        <li><a href="sl-percp.html">Learning a linear function with a single-layer perceptron.</a></li>
+        <li><a href="ml-percp.html">Learning a non-linear function with a multi-layer perceptron.</a></li>
+      </ul>
     </div>
 
-    <div id="data">
-      <div class="centered-wrapper">
-        <div class="canvas-wrapper">
-        <div id="alien"><img src="images/alien.png"></img></div>
-        <div class="canvas">
-        </div>
-        </div>
-
-        <div id="sliders">
-          <div class="notice" style="display: none;">
-            A Perceptron will converge &ndash; eventually. But sometimes in certain situations it just takes ages. You may wait or try it again by resetting everything.
-          </div>
-          <div class="iterations">
-            <h3>Iteration #<span class="value">0</span></h3>
-            <div style="display: none;" class="slider"></div>
-          </div>
-        </div>
-
-          
-        <div class="input">
-            <h3>Function to learn</h3>
-            <div id="real-f" class="f"><input id="real-m" type="number" step="any"></input> &middot; x + <input id="real-b" type="number" step="any"></input></div>
-
-            <h3>Perceptron's function</h3>
-            <div id="percp-f" class="f"><input id="percp-m" disabled></input> &middot; x + <input id="percp-b" disabled></input></div>
-
-            <h3>Perceptron's error rate</h3>
-            <div id="error" class="f"><input id="error-percentage" disabled></input> %</div>
-
-            <h3>Learning</h3>
-            <div class="buttons">
-              <button id="generate" onclick="d3percp.generate();">Add Random Data</button>
-              <button id="learn"    onclick="d3percp.learn();">Learn</button>
-              <button id="reset"    onclick="location.reload();">Reset</button>
-            </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js({app,.tmp}) scripts/main.js -->
-    <script src="scripts/percp.js"></script>
-    <script src="scripts/visualize-percp.js"></script>
-    <script src="scripts/visualize-data.js"></script>
-    <!-- endbuild -->
 </body>
 </html>

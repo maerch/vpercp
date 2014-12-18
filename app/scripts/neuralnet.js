@@ -1,8 +1,15 @@
-var Neuralnet = function(i, h, o) {
+var Neuralnet = function(i, h, o, eta) {
 
   this.i    = i;
   this.h    = h;
   this.o    = o;
+
+  this.eta  = eta || 0.001;
+
+  this.output = {
+    h: [],
+    o: []
+  };
 
   // Initialize weights from input to hidden layer
   this.w_ih = [];
@@ -43,6 +50,7 @@ Neuralnet.prototype = {
       }
     }
     hidden = hidden.map(function(h) { return this.sigma(h); }.bind(this));
+    this.output.h = hidden;
 
     // output layer
     // initialize array with o 0's
@@ -52,7 +60,50 @@ Neuralnet.prototype = {
         output[o] += this.w_ho[h][o] * hidden[h];
       }
     }
-    return output.map(function(o) { return this.sigma(o); }.bind(this));
+    output = output.map(function(o) { return this.sigma(o); }.bind(this));
+    this.output.o = output;
+    return output;
+  },
+
+  learn: function(input, label) {
+    if(input.length !== this.i)
+      throw "Input size not correct -- neural net is configured for length " +
+             this.i + " and not " + input.length;
+    if(label.length !== this.o)
+      throw "Label size not correct -- neural net is configured for length " +
+             this.o + " and not " + label.length;
+
+
+    // Apply input (output of all nodes stored inside the neural net
+    this.apply(input);
+
+    // Compute all deltas
+    var delta_o = [];
+    var delta_h = [];
+    
+    for(var o=0; o<this.o; o++) {
+      delta_o[o] = this.output.o[o]*(1 - this.output.o[o])*(this.output.o[o] - label[o]);
+    }
+    for(var h=0; h<this.h; h++) {
+      var sum = 0;
+      for(var o=0; o<this.o; o++) {
+        sum += delta_o[o] * this.w_ho[h][o];
+      }
+      delta_h[h] = this.output.h[h]*(1 - this.output.h[h]) * sum;
+    }
+
+    // Update the weights
+    for(var i=0; i<input.length; i++) {
+      for(var h=0; h<this.h; h++) {
+        this.w_ih[i][h] += -this.eta * delta_h[h] * input[i];
+      }
+    }
+    for(var h=0; h<this.h; h++) {
+      for(var o=0; o<this.o; o++) {
+        this.w_ho[h][o] += -this.eta * delta_o[o] * this.output.h[h];
+      }
+    }
+
   }
 };
 

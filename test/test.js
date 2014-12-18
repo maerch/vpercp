@@ -102,4 +102,53 @@ describe('Neuralnet', function(){
       assert(n.apply([1, 1])[3] === 0.5)
     });
   });
+
+  describe('#learn(input, label)', function() {
+    it('should not accept input of the wrong size', function() {
+      assert.throws(function() {
+        n.learn([1], [1, 1, 1, 1]);
+      }, /size not correct/);
+      assert.throws(function() {
+        n.apply([1, 2, 3], [1, 1, 1, 1]);
+      }, /size not correct/);
+      assert.doesNotThrow(function() {
+        n.apply([1, 2], [1, 1, 1, 1]);
+      });
+    });
+    it('should not accept label of the wrong size', function() {
+      assert.throws(function() {
+        n.learn([1, 2], [1, 1, 1]);
+      }, /size not correct/);
+      assert.throws(function() {
+        n.learn([1, 2], [1, 2, 3, 4, 5]);
+      }, /size not correct/);
+      assert.doesNotThrow(function() {
+        n.learn([1, 2], [1, 1, 1, 1]);
+      });
+    });
+    it('should change the weights', function() {
+      var w_ih = JSON.parse(JSON.stringify(n.w_ih));
+      var w_ho = JSON.parse(JSON.stringify(n.w_ho));
+
+      var r = function() {
+        return Math.random() * 200 - 100;
+      }
+
+      n.learn([2, -3], [r(), r(), r(), r()]);
+      
+      for(var i=0; i<n.i; i++) {
+        for(var h=0; h<n.h; h++) {
+          assert(w_ih[i][h]);
+          assert.notEqual(w_ih[i][h], n.w_ih[i][h]);
+        }
+      }
+
+      for(var h=0; h<n.h; h++) {
+        for(var o=0; o<n.o; o++) {
+          assert(w_ho[h][o]);
+          assert.notEqual(w_ho[h][o], n.w_ho[h][o]);
+        }
+      }
+    });
+  });
 });

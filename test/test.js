@@ -11,12 +11,14 @@ describe('Neuralnet', function(){
       assert.equal(3, n.w_ih[1].length);
       assert.throws(function() {n.w_ih[2].length;}, TypeError);
     });
+
     it('should have 3 times 4 weights from hidden to output layer', function(){
       assert.equal(4, n.w_ho[0].length);
       assert.equal(4, n.w_ho[1].length);
       assert.equal(4, n.w_ho[2].length);
       assert.throws(function() {n.w_ho[3].length;}, TypeError);
     });
+
     it('should have weights between -1 and 1', function() {
       for(var i=0; i<n.w_ih.length; i++) {
         for(var h=0; h<n.w_ih[i].length; h++) {
@@ -39,6 +41,7 @@ describe('Neuralnet', function(){
       assert(n.sigma(2)  > 0.88);
       assert(n.sigma(-2) < 0.12);
     });
+
     it('should be between 0 and 1', function() {
       for(var i=0; i<100; i++) {
         var y = n.sigma(Math.random()*100-50);
@@ -59,6 +62,7 @@ describe('Neuralnet', function(){
         n.apply([1, 2]);
       });
     });
+
     it('should have an output between 0 and 1', function() {
       for(var i=0; i<100; i++) {
         n = new Neuralnet(2, 5, 2);
@@ -69,6 +73,7 @@ describe('Neuralnet', function(){
 
       }
     });
+
     it('should give the correct output on 0-weights', function() {
       n.w_ih = [[0, 0, 0], [0, 0, 0]];
       n.w_ho = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
@@ -78,6 +83,7 @@ describe('Neuralnet', function(){
       n.w_ho = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
       assert.deepEqual([0.5, 0.5, 0.5, 0.5], n.apply([Math.random(), Math.random()]));
     });
+
     it('should only effect one output value on a single not-0-weight', function() {
       n.w_ih = [[0, 0, 0], [0, 0, 0]];
       n.w_ho = [[0, 0, 0, 2], [0, 0, 0, 0], [0, 0, 0, 0]];
@@ -115,6 +121,7 @@ describe('Neuralnet', function(){
         n.apply([1, 2], [1, 1, 1, 1]);
       });
     });
+
     it('should not accept label of the wrong size', function() {
       assert.throws(function() {
         n.learn([1, 2], [1, 1, 1]);
@@ -126,6 +133,7 @@ describe('Neuralnet', function(){
         n.learn([1, 2], [1, 1, 1, 1]);
       });
     });
+
     it('should change the weights', function() {
       var w_ih = JSON.parse(JSON.stringify(n.w_ih));
       var w_ho = JSON.parse(JSON.stringify(n.w_ho));
@@ -150,5 +158,33 @@ describe('Neuralnet', function(){
         }
       }
     });
+
+    it('should adjust the weights correctly for simple example', function() {
+      n.w_ih = [[0, 0, 0], [0, 0, 0]];
+      n.w_ho = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+
+      // calculated delta of weight manually for this example
+      var w_delta = -n.eta * 0.0625;
+      var w_ih = [[0, 0, 0], [0, 0, 0]];
+      var w_ho = [[-w_delta, -w_delta, -w_delta, -w_delta], 
+                  [-w_delta, -w_delta, -w_delta, -w_delta], 
+                  [-w_delta, -w_delta, -w_delta, -w_delta]];
+
+      n.learn([1, 1], [1, 1, 1, 1]);
+
+      assert.deepEqual(n.w_ih, w_ih);
+      assert.deepEqual(n.w_ho, w_ho);
+
+      var iterations = 100;
+      while(iterations-->0) {
+        var y_previous = n.apply([1, 1]);
+        n.learn([1, 1], [1, 1, 1, 1]);
+        var y = n.apply([1, 1]);
+        for(var o=0; o<n.o; o++) {
+          assert(y[o]-y_previous[o]>0, "No progress made");
+        }
+      }
+
+    })
   });
 });
